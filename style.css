@@ -1,0 +1,43 @@
+.header {
+
+}
+
+.file-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.output {
+    display: flex;
+    flex-direction: row;
+}
+
+table {
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 3px solid black;
+
+    flex-grow: 1;
+}
+
+table + table {
+    margin-left: 16px;
+}
+
+th {
+    font-weight: bold;
+}
+
+th, td {
+    padding: 8px;
+    border: 1px solid black;
+}
+
+.sub-item {
+    padding-left: 32px;
+}
+
+button {
+    flex-grow: 0;
+}

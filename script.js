@@ -121,7 +121,7 @@ function cleanData(inventoryResult) {
 */
 function parseData(orderResult, inventoryResult) {
     // Step through the inventory and create a map of SKUs to vendors
-
+    const errorDiv = document.querySelector('.errors');
     const itemSkuMap = {};
 
     inventoryResult.data.forEach((item) => {
@@ -143,6 +143,10 @@ function parseData(orderResult, inventoryResult) {
         const orderQuantity = parseInt(rawOrder[ORDER_QUANTITY_KEY])
         if (!item) {
             // We have no item information for the item - add it to an error output;
+            const errorElem = document.createElement('div');
+            errorElem.innerText = `We had some trouble parsing this row: ${JSON.stringify(rawOrder)}`;
+            errorDiv.appendChild(errorElem)
+            return;
         }
 
         const vendor = item.vendorName;
@@ -158,6 +162,10 @@ function parseData(orderResult, inventoryResult) {
             vendorEntry.items[item.itemSku].itemCount += orderQuantity;
         } else {
             // We have no vendor information for the item - add it to an error output
+            const errorElem = document.createElement('div');
+            errorElem.innerText = `We had some trouble parsing this vendor: ${item.vendorName}`;
+            errorDiv.appendChild(errorElem)
+            return;
         }
 
         // Build out the orderMap here
@@ -196,7 +204,7 @@ function renderData(vendorTotal, orderInfo) {
 
         vendorCell.innerText = vendor;
         countCell.innerText = vendorEntry.itemTotal();
-        totalCell.innerText = vendorEntry.calcTotal();
+        totalCell.innerText = `$${vendorEntry.calcTotal().toFixed(2)}`;
 
         // Sub-rows
         for (const item in vendorEntry.items) {

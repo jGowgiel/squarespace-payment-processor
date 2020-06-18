@@ -13,6 +13,16 @@
     flex-direction: row;
 }
 
+.errors {
+    display: flex;
+    flex-direction: column;
+    margin-top: 32px;
+}
+
+.errors div {
+    padding-top: 16px;
+}
+
 table {
     table-layout: fixed;
     border-collapse: collapse;

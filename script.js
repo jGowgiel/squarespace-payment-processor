@@ -5,6 +5,7 @@
 const ORDER_PRICE_KEY = 'Lineitem price';
 const ORDER_ITEM_SKU_KEY = 'Lineitem sku';
 const ORDER_NAME_KEY = 'Lineitem name';
+const ORDER_QUANTITY_KEY = 'Lineitem quantity';
 const ORDER_ID_KEY = 'Order ID'
 
 class VendorEntry {
@@ -17,6 +18,14 @@ class VendorEntry {
         let total = 0;
         for (const item in this.items) {
             total += this.items[item].calcTotal();
+        }
+        return total;
+    }
+
+    itemTotal() {
+        let total = 0;
+        for (const item in this.items) {
+            total += this.items[item].itemCount;
         }
         return total;
     }
@@ -131,6 +140,7 @@ function parseData(orderResult, inventoryResult) {
 
         // Build out the vendorMap here
         const item = itemSkuMap[rawOrder[ORDER_ITEM_SKU_KEY]];
+        const orderQuantity = parseInt(rawOrder[ORDER_QUANTITY_KEY])
         if (!item) {
             // We have no item information for the item - add it to an error output;
         }
@@ -145,7 +155,7 @@ function parseData(orderResult, inventoryResult) {
             if (!(item.itemSku in vendorEntry.items)) {
                 vendorEntry.items[item.itemSku] = new ItemVendorEntry(item);
             }
-            vendorEntry.items[item.itemSku].itemCount += 1;
+            vendorEntry.items[item.itemSku].itemCount += orderQuantity;
         } else {
             // We have no vendor information for the item - add it to an error output
         }
@@ -159,7 +169,7 @@ function parseData(orderResult, inventoryResult) {
         if (!(item.itemSku in orderEntry)) {
             orderEntry[item.itemSku] = new ItemVendorEntry(item);
         }
-        orderEntry[item.itemSku].itemCount += 1;
+        orderEntry[item.itemSku].itemCount += orderQuantity;
     })
     return [vendorMap, orderMap];
 }
@@ -173,7 +183,7 @@ function renderData(vendorTotal, orderInfo) {
     const headVendorRow = vendorTable.insertRow();
     headVendorRow.insertCell(0).innerText = 'Vendor';
     headVendorRow.insertCell(1).innerText = 'Quantity';
-    headVendorRow.insertCell(2).innerText = 'Total Sales';
+    headVendorRow.insertCell(2).innerText = 'Total Sales ($)';
 
     // Display results
     for (let vendor in vendorTotal) {
@@ -185,7 +195,7 @@ function renderData(vendorTotal, orderInfo) {
         const totalCell = vendorRow.insertCell(2);
 
         vendorCell.innerText = vendor;
-        countCell.innerText = Object.entries(vendorEntry.items).length;
+        countCell.innerText = vendorEntry.itemTotal();
         totalCell.innerText = vendorEntry.calcTotal();
 
         // Sub-rows
@@ -194,11 +204,9 @@ function renderData(vendorTotal, orderInfo) {
             const itemRow = vendorTable.insertRow();
             const itemVendorCell = itemRow.insertCell(0);
             const itemCountCell = itemRow.insertCell(1);
-            const itemTotalCell = itemRow.insertCell(2);
             itemVendorCell.innerText = itemEntry.item.getNameWithVariant();
             itemVendorCell.className = 'sub-item'
             itemCountCell.innerText = itemEntry.itemCount;
-            itemTotalCell.innerText = itemEntry.calcTotal();
         }
     }
     result.appendChild(vendorTable);

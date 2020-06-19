@@ -113,6 +113,9 @@ function cleanData(inventoryResult) {
         if (item[ITEM_CATEGORY_KEY] == '') {
             item[ITEM_CATEGORY_KEY] = inventoryResult.data[index - 1][ITEM_CATEGORY_KEY];
         }
+        if (item[ITEM_TITLE_KEY] == '') {
+            item[ITEM_TITLE_KEY] = inventoryResult.data[index - 1][ITEM_TITLE_KEY];
+        }
     })
 }
 

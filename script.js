@@ -228,8 +228,8 @@ function renderData(vendorTotal, orderInfo) {
     const headOrderRow = orderTable.insertRow();
     headOrderRow.insertCell(0).innerText = 'Order Id';
     headOrderRow.insertCell(1).innerText = 'Vendor';
-    headOrderRow.insertCell(2).innerText = 'Item';
-    headOrderRow.insertCell(3).innerText = 'Quantity';
+    headOrderRow.insertCell(2).innerText = 'Quantity';
+    headOrderRow.insertCell(3).innerText = 'Item';
 
     for (const order in orderInfo) {
         const orderEntry = orderInfo[order];
@@ -239,8 +239,8 @@ function renderData(vendorTotal, orderInfo) {
             const orderItemRow = orderTable.insertRow();
             const orderIdCell = orderItemRow.insertCell(0);
             const orderVendorCell = orderItemRow.insertCell(1);
-            const orderItemNameCell = orderItemRow.insertCell(2);
-            const orderItemCountCell = orderItemRow.insertCell(3);
+            const orderItemCountCell = orderItemRow.insertCell(2);
+            const orderItemNameCell = orderItemRow.insertCell(3);
 
             orderIdCell.innerText = order;
             orderVendorCell.innerText = orderItem.item.vendorName;
